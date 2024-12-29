@@ -3,12 +3,14 @@ import "dotenv/config"
 import chalk from "chalk"
 import Enquirer from "enquirer"
 import qcashGrafana from "./functions/qcash-grafana.js"
+import dbGrafana from "./functions/db-grafana.js"
 
 const cliOptions = {
     // GENERATE_ALL_MONITORING_CAPTURES: "generate all monitoring captures",
     // GET_QCASH_GRAFANA_DETAILS: "get qcash grafana details",
     SCRAPE_QCASH_GRAFANA_MONITORING_PAGE:
         "scrape QCASH grafana monitoring page",
+    SCRAPE_DB_GRAFANA_MONITORING_PAGE: "scrape DB grafana monitoring page",
     // GENERATE_TEST_HTML: "generate test html",
     // SEE_TEST_DATA: "see test data",
     // SEE_MAIN_GRAFANA_MONITORING: "see main grafana monitoring",
@@ -19,8 +21,6 @@ const cliOptions = {
 async function main() {
     let firstTime = true
     let exit = false
-    let browser
-    let page
 
     console.log(`Welcome to ${chalk.blueBright("QCASH Monitoring CLI")}!`)
 
@@ -39,6 +39,9 @@ async function main() {
             switch (choice) {
                 case cliOptions.SCRAPE_QCASH_GRAFANA_MONITORING_PAGE:
                     await qcashGrafana.printData()
+                    break
+                case cliOptions.SCRAPE_DB_GRAFANA_MONITORING_PAGE:
+                    await dbGrafana.printData()
                     break
                 default:
                     exit = true

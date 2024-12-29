@@ -1,22 +1,22 @@
 import chalk from "chalk"
+import { Page } from "puppeteer"
 import { getPanelValues, waitForPanelsToLoad } from "../lib/grafana.js"
 import { bootBrowser, env, printPrettifiedData } from "../lib/index.js"
 
-const URL = env.QCASH_MAIN_GRAFANA_URL
+const URL = env.DB_GRAFANA_URL
 const PANELS = {
-    SALES_VOLUME: "Today Sales Volume",
-    FEE: "Today Fee",
-    ACTIVE_USER: "Active User",
-    TOTAL_COMPANY: "Total Company",
-    FAILED_TRX: "Today Failed Financial Transaction",
-    FAILED_SYSTEM_TRX: "Today Error System Financial Transaction",
-    TODAY_SUCCESS_TRX: "Today Success Financial Transaction",
-    ALL_TRX: "Today All Financial Transaction",
-    SUCCESS_RATE: "Today Success Rate ",
+    POSTGRES_CPU_USAGE: 194,
+    POSTGRES_RAM_USAGE: 190,
+    POSTGRES_STORAGE_USAGE: 214,
 }
 
 async function printData() {
-    const { browser, page, spinner } = await bootBrowser()
+    const { browser, page, spinner } = await bootBrowser({
+        args: [
+            "--ignore-certificate-errors",
+            "--ignore-certificate-errors-spki-list",
+        ],
+    })
     try {
         spinner.text = `Navigating to ${chalk.magentaBright(URL)}..`
 
@@ -34,10 +34,10 @@ async function printData() {
         spinner.text = "Fetching monitoring values.."
         const data = await getPanelValues(page, PANELS, getGrafanaValueSelector)
 
-        // await page.screenshot({
-        //     path: "screenshots/test.png",
-        // })
-        // console.log("Screenshot taken!")
+        // Take a screenshot after bypassing
+        await page.screenshot({
+            path: "screenshots/test.png",
+        })
 
         spinner.succeed(` ${chalk.greenBright("Successfuly scraped data")}`)
         printPrettifiedData(data)
@@ -54,10 +54,10 @@ async function printData() {
  */
 async function login(page, spinner) {
     spinner.text = "Inputing credentials.."
-    await page.type('input[name="user"]', env.QCASH_MAIN_GRAFANA_USER)
-    await page.type('input[name="password"]', env.QCASH_MAIN_GRAFANA_PASSWORD)
+    await page.type('input[name="user"]', env.DB_GRAFANA_USER)
+    await page.type('input[name="password"]', env.DB_GRAFANA_PASSWORD)
     spinner.text = "Logging in.."
-    // click login
+    // click login button and wait
     await Promise.all([
         page.waitForNavigation(),
         await page.click('[aria-label="Login button"]'),
@@ -66,10 +66,10 @@ async function login(page, spinner) {
 }
 
 /**
- * @param {string} title
+ * @param {number} panelId
  */
-function getGrafanaValueSelector(title) {
-    return `div[aria-label="Panel container title ${title}"] :nth-child(2) div div div div div div span`
+function getGrafanaValueSelector(panelId) {
+    return `#panel-${panelId} > div > div:nth-child(1) > div > div.panel-content > div > plugin-component > panel-plugin-graph > grafana-panel > ng-transclude > div > div.graph-legend > div > div.view > div > div > div`
 }
 
 export default {
