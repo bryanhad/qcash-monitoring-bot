@@ -1,4 +1,5 @@
 import { Page } from "puppeteer"
+import {env} from './index.js'
 
 /**
  * @param {string} title
@@ -84,11 +85,10 @@ async function getMonitoringValues(page, titlesObj) {
 async function goToPageAndWaitToLoad(page, url, titles, spinner) {
     await page.goto(url, { timeout: 60000 })
     await page.setViewport({ width: 1920, height: 1080 })
-
+    
     spinner.text = "Inputing credentials.."
     await page.type('input[name="user"]', env.QCASH_MAIN_GRAFANA_USER)
     await page.type('input[name="password"]', env.QCASH_MAIN_GRAFANA_PASSWORD)
-
     // click login
     await Promise.all([
         page.waitForNavigation(),

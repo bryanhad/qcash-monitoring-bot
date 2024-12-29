@@ -24,8 +24,9 @@ export function getTemplateFilePath(fileName) {
 
 /**
  * @param {Record<string, string>} obj A key-value pair object to be printed out to the cli in a box
+ * @param {string} boxTitle
  */
-export function printPrettifiedData(obj) {
+export function printPrettifiedData(obj, boxTitle) {
     let stringifiedDummyData = ""
     for (const [key, value] of Object.entries(obj)) {
         stringifiedDummyData += `• ${key}: ${value}\n`
@@ -33,9 +34,23 @@ export function printPrettifiedData(obj) {
 
     console.log(
         boxen(stringifiedDummyData, {
-            title: "Test Data",
+            title: boxTitle,
             titleAlignment: "left",
             padding: 1,
         })
     )
+}
+
+export function getCurrentTimeStamp() {
+    const now = new Date()
+    const hours = now.getHours() // Gets the hour (0-23)
+    const minutes = now.getMinutes() // Gets the minutes (0-59)
+    const seconds = now.getSeconds() // Gets the seconds (0-59)
+
+    // Format it as HH:mm
+    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+
+    return formattedTime
 }
