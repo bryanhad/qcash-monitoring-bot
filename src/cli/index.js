@@ -1,30 +1,28 @@
-import "dotenv/config"
-
-import chalk from "chalk"
-import Enquirer from "enquirer"
-import qcashGrafana from "./functions/qcash-grafana.js"
-import dbGrafana from "./functions/db-grafana.js"
+import chalk from 'chalk'
+import Enquirer from 'enquirer'
+import qcashGrafana from './qcash-grafana.js'
+import dbGrafana from './db-grafana.js'
 
 const cliOptions = {
     SCRAPE_QCASH_GRAFANA_MONITORING_PAGE:
-        "scrape QCASH grafana monitoring page",
-    SCRAPE_DB_GRAFANA_MONITORING_PAGE: "scrape DB grafana monitoring page",
-    EXIT: "exit",
+        'scrape QCASH grafana monitoring page',
+    SCRAPE_DB_GRAFANA_MONITORING_PAGE: 'scrape DB grafana monitoring page',
+    EXIT: 'exit',
 }
 
-async function main() {
+async function startCLI() {
     let firstTime = true
     let exit = false
 
-    console.log(`Welcome to ${chalk.blueBright("QCASH Monitoring CLI")}!`)
+    console.log(`Welcome to ${chalk.blueBright('QCASH Monitoring CLI')}!`)
 
     while (!exit) {
         try {
             const choice = await new Enquirer.Select({
-                name: "home",
+                name: 'home',
                 message: firstTime
-                    ? "What do you want to do?"
-                    : "Anything else you want to do?",
+                    ? 'What do you want to do?'
+                    : 'Anything else you want to do?',
                 choices: Object.values(cliOptions),
             }).run()
 
@@ -42,16 +40,18 @@ async function main() {
                     break
             }
             if (!exit) {
-                console.log("\n")
+                console.log('\n')
             }
         } catch (err) {
-            console.log(chalk.red("Something went wrong!"))
+            console.log(chalk.red('Something went wrong!'))
             console.error(err)
             exit = true // Exit on error
         }
     }
 
-    console.log(chalk.greenBright("😊 Happy monitoring!"))
+    console.log(chalk.greenBright('😊 Happy monitoring!'))
 }
 
-main()
+export default {
+    startCLI,
+}

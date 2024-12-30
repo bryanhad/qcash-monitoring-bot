@@ -3,7 +3,6 @@ import { dirname } from "path"
 import path from "path"
 import boxen from "boxen"
 import puppeteer, { Browser, Page } from "puppeteer"
-import ora from "ora"
 
 export const __filename = fileURLToPath(import.meta.url)
 export const __dirname = dirname(__filename)
@@ -75,11 +74,10 @@ export function getCurrentTimeStamp() {
 
 /**
  *  @param {import("puppeteer").LaunchOptions} browserOptions
- * @returns {{browser: Browser, page: Page, spinner: import("ora").Ora}}
+ * @returns {{browser: Browser, page: Page}}
  */
 export async function bootBrowser(browserOptions) {
-    const spinner = ora(`booting up headless browser..`).start()
     const browser = await puppeteer.launch(browserOptions)
     const page = await browser.newPage()
-    return { browser, page, spinner }
+    return { browser, page }
 }
