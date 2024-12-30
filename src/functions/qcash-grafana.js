@@ -1,6 +1,6 @@
 import chalk from "chalk"
 import { getPanelValues, waitForPanelsToLoad } from "../lib/grafana.js"
-import { bootBrowser, env, printPrettifiedData } from "../lib/index.js"
+import { bootBrowser, env, getPrettifiedData, printPrettifiedData } from "../lib/index.js"
 
 const URL = env.QCASH_MAIN_GRAFANA_URL
 const PANELS = {
@@ -40,7 +40,8 @@ async function printData() {
         // console.log("Screenshot taken!")
 
         spinner.succeed(` ${chalk.greenBright("Successfuly scraped data")}`)
-        printPrettifiedData(data)
+        // printPrettifiedData(data)
+        return getPrettifiedData(data)
     } catch (err) {
         spinner.fail(chalk.red(err.message ?? "Something went wrong!"))
     } finally {

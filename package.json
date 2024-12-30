@@ -16,8 +16,10 @@
         "dotenv": "^16.4.7",
         "ejs": "^3.1.10",
         "enquirer": "^2.4.1",
+        "node-telegram-bot-api": "^0.66.0",
         "open": "^10.1.0",
         "ora": "^8.1.1",
-        "puppeteer": "^23.11.1"
+        "puppeteer": "^23.11.1",
+        "uuid": "^11.0.3"
     }
 }

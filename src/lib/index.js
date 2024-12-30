@@ -17,6 +17,7 @@ export const env = {
     DB_GRAFANA_USER: process.env.DB_GRAFANA_USER,
     DB_GRAFANA_PASSWORD: process.env.DB_GRAFANA_PASSWORD,
     DB_GRAFANA_URL: process.env.DB_GRAFANA_URL,
+    TELEGRAM_API_KEY: process.env.TELEGRAM_API_KEY,
 }
 
 /**
@@ -44,6 +45,18 @@ export function printPrettifiedData(data, boxTitle) {
             padding: 1,
         })
     )
+}
+
+/**
+ * @param {Record<string, string>} data A key-value pair object to be printed out to the cli in a box
+ */
+export function getPrettifiedData(data) {
+    let stringifiedDummyData = ""
+    for (const [key, value] of Object.entries(data)) {
+        stringifiedDummyData += `• ${key}: ${value}\n`
+    }
+
+    return stringifiedDummyData
 }
 
 export function getCurrentTimeStamp() {
