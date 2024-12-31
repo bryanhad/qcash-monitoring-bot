@@ -1,13 +1,13 @@
-import { fileURLToPath } from "url"
-import { dirname } from "path"
-import path from "path"
-import boxen from "boxen"
-import puppeteer, { Browser, Page } from "puppeteer"
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+import path from 'path'
+import boxen from 'boxen'
+import puppeteer, { Browser, Page } from 'puppeteer'
 
 export const __filename = fileURLToPath(import.meta.url)
 export const __dirname = dirname(__filename)
 
-export const outputPath = path.join(process.cwd(), "template", "output.html")
+export const outputPath = path.join(process.cwd(), 'template', 'output.html')
 
 export const env = {
     QCASH_MAIN_GRAFANA_USER: process.env.QCASH_MAIN_GRAFANA_USER,
@@ -16,7 +16,9 @@ export const env = {
     DB_GRAFANA_USER: process.env.DB_GRAFANA_USER,
     DB_GRAFANA_PASSWORD: process.env.DB_GRAFANA_PASSWORD,
     DB_GRAFANA_URL: process.env.DB_GRAFANA_URL,
-    TELEGRAM_API_KEY: process.env.TELEGRAM_API_KEY,
+    TELEGRAM_TOKEN: process.env.TELEGRAM_TOKEN,
+    SERVER_URL: process.env.SERVER_URL,
+    PORT: process.env.PORT,
 }
 
 /**
@@ -24,7 +26,7 @@ export const env = {
  * @returns {string} The file path to the ejs file. e.g. [cwd]/template/[fileName].ejs
  */
 export function getTemplateFilePath(fileName) {
-    return path.join(process.cwd(), "template", `${fileName}.ejs`)
+    return path.join(process.cwd(), 'template', `${fileName}.ejs`)
 }
 
 /**
@@ -32,7 +34,7 @@ export function getTemplateFilePath(fileName) {
  * @param {string|undefined} boxTitle
  */
 export function printPrettifiedData(data, boxTitle) {
-    let stringifiedDummyData = ""
+    let stringifiedDummyData = ''
     for (const [key, value] of Object.entries(data)) {
         stringifiedDummyData += `• ${key}: ${value}\n`
     }
@@ -40,7 +42,7 @@ export function printPrettifiedData(data, boxTitle) {
     console.log(
         boxen(stringifiedDummyData, {
             title: boxTitle ?? `SCRAPED AT ${getCurrentTimeStamp()}`,
-            titleAlignment: "left",
+            titleAlignment: 'left',
             padding: 1,
         })
     )
@@ -50,7 +52,7 @@ export function printPrettifiedData(data, boxTitle) {
  * @param {Record<string, string>} data A key-value pair object to be printed out to the cli in a box
  */
 export function getPrettifiedData(data) {
-    let stringifiedDummyData = ""
+    let stringifiedDummyData = ''
     for (const [key, value] of Object.entries(data)) {
         stringifiedDummyData += `• ${key}: ${value}\n`
     }
@@ -65,9 +67,9 @@ export function getCurrentTimeStamp() {
     const seconds = now.getSeconds() // Gets the seconds (0-59)
 
     // Format it as HH:mm
-    const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes
         .toString()
-        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+        .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 
     return formattedTime
 }
