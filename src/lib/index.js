@@ -76,7 +76,7 @@ export function getCurrentTimeStamp() {
 
 /**
  *  @param {import("puppeteer").LaunchOptions} browserOptions
- * @returns {{browser: Browser, page: Page}}
+ * @returns {Promise<{browser: Browser, page: Page}>}
  */
 export async function bootBrowser(browserOptions) {
     const browser = await puppeteer.launch(browserOptions)

@@ -1,3 +1,5 @@
+import "dotenv/config"
+
 import chalk from 'chalk'
 import Enquirer from 'enquirer'
 import qcashGrafana from './qcash-grafana.js'
@@ -52,6 +54,4 @@ async function startCLI() {
     console.log(chalk.greenBright('😊 Happy monitoring!'))
 }
 
-export default {
-    startCLI,
-}
+startCLI()

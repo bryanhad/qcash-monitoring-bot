@@ -16,12 +16,3 @@ export async function setWebHook() {
     return setWebHookSchema.safeParse(res)
 }
 
-/**
- * @param {{message: {chat: {id:string}, text: string}}} data
- */
-export function getChatData(data) {
-    return {
-        chat_id: data.message.chat.id,
-        text: data.message.text,
-    }
-}

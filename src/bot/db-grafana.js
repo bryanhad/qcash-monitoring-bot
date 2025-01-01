@@ -1,7 +1,7 @@
 import chalk from "chalk"
 import { Page } from "puppeteer"
 import { getPanelValues, waitForPanelsToLoad } from "../lib/grafana.js"
-import { bootBrowser, env, printPrettifiedData } from "../lib/index.js"
+import { bootBrowser, env, getPrettifiedData } from "../lib/index.js"
 import ora from "ora"
 
 const URL = env.DB_GRAFANA_URL
@@ -11,10 +11,9 @@ const PANELS = {
     POSTGRES_STORAGE_USAGE: 214,
 }
 
-async function printData() {
+async function getDBDetails() {
     const spinner = ora(`booting up headless browser..`).start()
     const { browser, page } = await bootBrowser({
-        headless:false,
         args: [
             "--ignore-certificate-errors",
             "--ignore-certificate-errors-spki-list",
@@ -43,9 +42,11 @@ async function printData() {
         })
 
         spinner.succeed(` ${chalk.greenBright("Successfuly scraped data")}`)
-        printPrettifiedData(data)
+        return getPrettifiedData(data)
     } catch (err) {
+        console.log(err)
         spinner.fail(chalk.red(err.message ?? "Something went wrong!"))
+        return err.message
     } finally {
         await browser.close()
     }
@@ -75,6 +76,4 @@ function getGrafanaValueSelector(panelId) {
     return `#panel-${panelId} > div > div:nth-child(1) > div > div.panel-content > div > plugin-component > panel-plugin-graph > grafana-panel > ng-transclude > div > div.graph-legend > div > div.view > div > div > div`
 }
 
-export default {
-    printData,
-}
+export default getDBDetails

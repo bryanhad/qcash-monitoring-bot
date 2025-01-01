@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from "zod"
 
 export const setWebHookSchema = z.object({
     ok: z.boolean(),
@@ -6,33 +6,31 @@ export const setWebHookSchema = z.object({
     description: z.string(),
 })
 
-export const telegramRequestBodySchema = z.object({
-    update_id: z.number().optional(),
-    message: z.object({
-        message_id: z.number().optional(),
-        from: z
+export const telegramRequestBodySchema = z
+    .object({
+        message: z
             .object({
-                id: z.number(),
-                is_bot: z.boolean(),
-                first_name: z.string(),
-                language_code: z.string(),
+                message_id: z.number(),
+                chat: z.object({
+                    id: z.number(),
+                }),
+                text: z.string(),
             })
-            .optional(),
-        chat: z.object({
-            id: z.number(),
-            first_name: z.string(),
-            type: z.string(),
-        }),
-        date: z.number().optional(),
-        text: z.string(),
-        entities: z
-            .array(
-                z.object({
-                    type: z.string(),
-                    offset: z.number(),
-                    length: z.number(),
-                })
-            )
-            .optional(),
-    }),
-})
+            .optional(), // Make it optional
+        edited_message: z
+            .object({
+                message_id: z.number(),
+                chat: z.object({
+                    id: z.number(),
+                }),
+                text: z.string(),
+            })
+            .optional(), // Also optional
+    })
+    .refine(
+        (data) => data.message || data.edited_message, // At least one of them must exist
+        {
+            message: "Either 'message' or 'edited_message' must be present",
+            path: [], // This path specifies where the error occurs, empty for global error
+        }
+    )
